@@ -5,6 +5,7 @@ from PyHatchit.Qt.QtCore import *
 
 
 app = QApplication(len(sys.argv), sys.argv)
+app.aboutQt()
 w = QSize(40, 50)
 x = QSize(15, 15)
 

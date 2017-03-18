@@ -16,6 +16,10 @@
 #include <pkh_platform.h>
 #include <pkh_qapplication.h>
 #include <pkh_qsize.h>
+#include <pkh_qglobal.h>
+#include <pkh_qsysinfo.h>
+
+#include <QString>
 
 PYBIND11_PLUGIN(PyHatchit) {
 
@@ -25,8 +29,20 @@ PYBIND11_PLUGIN(PyHatchit) {
         py::module _Qt = owner.def_submodule("Qt", "Qt module");
         py::module _QtCore = _Qt.def_submodule("QtCore", "QtCore submodule");
 
+        Register_QGlobal(_Qt);
+        Register_QSysInfo(_QtCore);
         Register_QApplication(_QtCore);
         Register_QSize(_QtCore);
+
+        py::class_<QString>(_QtCore, "QString")
+                .def("__init__", [](QString& instance, std::string& in)
+                {
+                    new (&instance) QString(in.c_str());
+                })
+                .def("__repr__", [](const QString& instance){
+                    return instance.toStdString();
+                });
+
 
         //py::class_<QApplication>(sub, "QApplication")
         //.def("__init__",

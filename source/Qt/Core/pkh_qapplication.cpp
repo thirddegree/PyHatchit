@@ -29,6 +29,8 @@ void Register_QApplication(py::module& parent)
         .def("styleSheet", [](QApplication& instance){
             return instance.styleSheet().toStdString();
         })
+        .def("setStyleSheet", &QApplication::setStyleSheet)
+        .def_static("aboutQt", &QApplication::aboutQt)
         .def_static("exec_", &QApplication::exec)
         .def_static("beep", &QApplication::beep);
 }
