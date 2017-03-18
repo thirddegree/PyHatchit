@@ -41,4 +41,29 @@ if(WIN32)
                         PREFIX "${PYTHON_MODULE_PREFIX}"
                         SUFFIX "${PYTHON_MODULE_EXTENSION}")
 
+elseif(UNIX)
+
+set(CMAKE_PREFIX_PATH "~/Qt/5.8/gcc_64/")
+
+find_package(Qt5 COMPONENTS Core Gui Widgets WebEngine WebEngineWidgets REQUIRED)
+find_package(PythonLibs 3.6 REQUIRED PYTHON)
+find_package(pybind11 REQUIRED)
+
+include_directories("${CMAKE_SOURCE_DIR}/include"
+                    "${CMAKE_SOURCE_DIR}/include/Qt/Core/"
+                    ${PYTHON_INCLUDE_DIR})
+
+file(GLOB INCLUDE_FILES ${CMAKE_SOURCE_DIR}/include/*.h ${CMAKE_SOURCE_DIR}/include/Qt/Core/*.h)
+file(GLOB SOURCE_FILES ${CMAKE_SOURCE_DIR}/source/*.cpp ${CMAKE_SOURCE_DIR}/source/Qt/Core/*.cpp)
+
+add_library(PyHatchit MODULE ${INCLUDE_FILES} ${SOURCE_FILES})
+
+target_link_libraries(PyHatchit ${PYTHON_LIBRARY} pybind11::module Qt5::Core Qt5::Widgets Qt5::Gui Qt5::WebEngine Qt5::WebEngineWidgets)
+
+set_target_properties(PyHatchit PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/python"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/python"
+        PREFIX ""
+        OUTPUT_NAME "PyHatchit")
+
 endif()
