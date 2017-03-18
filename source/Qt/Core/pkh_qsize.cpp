@@ -31,10 +31,29 @@ void Register_QSize(py::module& parent)
             .def("isValid", &QSize::isValid)
             .def("transpose", &QSize::transpose)
             .def("transposed", &QSize::transposed)
+            .def("__itruediv__", [](QSize& instance, float b){
+                return instance /= static_cast<qreal>(b);
+            })
+            .def("__imul__", [](QSize& instance, float b){
+                return instance *= static_cast<qreal>(b);
+            })
+            .def(py::self += py::self)
+            .def(py::self -= py::self)
+            .def(py::self != py::self)
+            .def(py::self == py::self)
+            .def(py::self + py::self)
+            .def(py::self - py::self)
+            .def("__mul__", [](QSize& instance, float b){
+                return instance * static_cast<qreal>(b);
+            })
+            .def("__truediv__", [](QSize& instance, float b){
+                return instance / static_cast<qreal>(b);
+            })
             .def("__repr__",
                 [](const QSize& s) {
                     std::stringstream ss;
                     ss << "<PyHatchit.Qt.QtCore.QSize [w:" << s.width() << ",h:" << s.height() << "]>";
                     return ss.str();
                 });
+
 }
